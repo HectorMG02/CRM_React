@@ -1,8 +1,11 @@
 import React from "react";
 import Head from "next/head";
 import Sidebar from "./Sidebar";
+import { useRouter } from "next/router";
 
 const Layout = ({ children }) => {
+  const router = useRouter();
+
   return (
     <>
       <Head>
@@ -20,14 +23,20 @@ const Layout = ({ children }) => {
         />
       </Head>
 
-      <div>
-        <div className="flex">
-          <Sidebar />
-          <div className="sm:w-2/3 xl:w-4/5 sm:min-h-screen p-5">
-            {children}
+      {router.pathname === "/login" || router.pathname === "/registro" ? (
+        <div className="bg-gray-800 min-h-screen flex flex-col justify-center">
+          {children}
+        </div>
+      ) : (
+        <div className="bg-gray-200 min-h-screen">
+          <div className="flex">
+            <Sidebar />
+            <div className="sm:w-2/3 xl:w-4/5 sm:min-h-screen p-5">
+              {children}
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </>
   );
 };
