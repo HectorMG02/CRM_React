@@ -11,6 +11,17 @@ const registro = () => {
       email: "",
       password: "",
     },
+    validationSchema: Yup.object({
+      nombre: Yup.string().required("El nombre es requerido"),
+      apellido: Yup.string().required("El apellido es requerido"),
+      email: Yup.string()
+        .email("El email no es válido")
+        .required("El email es requerido"),
+      password: Yup.string().min(
+        6,
+        "La contraseña debe tener al menos 6 caracteres"
+      ),
+    }),
     onSubmit: (values) => {
       console.log(values);
     },
@@ -44,6 +55,13 @@ const registro = () => {
                   value={formik.values.nombre}
                   onChange={formik.handleChange}
                 />
+
+                {formik.touched.nombre && formik.errors.nombre ? (
+                  <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+                    <p className="font-bold">Error</p>
+                    <p>{formik.errors.nombre}</p>
+                  </div>
+                ) : null}
               </div>
 
               <div className="mb-4">
@@ -61,6 +79,13 @@ const registro = () => {
                   value={formik.values.apellido}
                   onChange={formik.handleChange}
                 />
+
+                {formik.touched.apellido && formik.errors.apellido ? (
+                  <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+                    <p className="font-bold">Error</p>
+                    <p>{formik.errors.apellido}</p>
+                  </div>
+                ) : null}
               </div>
 
               <div className="mb-4">
@@ -78,6 +103,13 @@ const registro = () => {
                   value={formik.values.email}
                   onChange={formik.handleChange}
                 />
+
+                {formik.touched.email && formik.errors.email ? (
+                  <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+                    <p className="font-bold">Error</p>
+                    <p>{formik.errors.email}</p>
+                  </div>
+                ) : null}
               </div>
 
               <div>
@@ -95,6 +127,13 @@ const registro = () => {
                   value={formik.values.password}
                   onChange={formik.handleChange}
                 />
+
+                {formik.touched.password && formik.errors.password ? (
+                  <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+                    <p className="font-bold">Error</p>
+                    <p>{formik.errors.password}</p>
+                  </div>
+                ) : null}
               </div>
 
               <input
