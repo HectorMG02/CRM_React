@@ -19,7 +19,7 @@ const login = () => {
                 </label>
                 <input
                   type="email"
-                  className="shadow appearence-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   id="email"
                   placeholder="Email del usuario"
                 />
@@ -34,7 +34,7 @@ const login = () => {
                 </label>
                 <input
                   type="password"
-                  className="shadow appearence-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   id="password"
                   placeholder="Password del usuario"
                 />
