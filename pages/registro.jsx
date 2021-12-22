@@ -1,9 +1,27 @@
-import React from "react";
+import { useState } from "react";
+import { useRouter } from "next/router";
 import Layout from "../components/Layout";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useMutation, gql } from "@apollo/client";
+
+const NUEVO_USUARIO = gql`
+  mutation nuevoUsuario($input: UsuarioInput) {
+    nuevoUsuario(input: $input) {
+      id
+      nombre
+      apellido
+      email
+    }
+  }
+`;
 
 const registro = () => {
+  const [error, setError] = useState(null);
+  const [nuevoUsuario] = useMutation(NUEVO_USUARIO);
+
+  const router = useRouter();
+
   const formik = useFormik({
     initialValues: {
       nombre: "",
@@ -22,8 +40,28 @@ const registro = () => {
         "La contraseña debe tener al menos 6 caracteres"
       ),
     }),
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: async (values) => {
+      try {
+        const { nombre, apellido, email, password } = values;
+        const { data } = await nuevoUsuario({
+          variables: {
+            input: {
+              nombre,
+              apellido,
+              email,
+              password,
+            },
+          },
+        });
+
+        router.push("/");
+      } catch (error) {
+        setError(error.message);
+
+        setTimeout(() => {
+          setError(null);
+        }, 1500);
+      }
     },
   });
 
@@ -121,7 +159,7 @@ const registro = () => {
                 </label>
                 <input
                   type="password"
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  className="shadow appearance-none border rounded w-full mb-3 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   id="password"
                   placeholder="Password del usuario"
                   value={formik.values.password}
@@ -129,18 +167,25 @@ const registro = () => {
                 />
 
                 {formik.touched.password && formik.errors.password ? (
-                  <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+                  <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
                     <p className="font-bold">Error</p>
                     <p>{formik.errors.password}</p>
                   </div>
                 ) : null}
               </div>
 
-              <input
+              {error ? (
+                <div>
+                  <p className="text-red-700 mb-1 text-center">{error}</p>
+                </div>
+              ) : null}
+
+              <button
                 type="submit"
-                className="bg-gray-800 w-full mt-5 p-2 text-white uppercase hover:bg-gray-900"
-                value="Crear Usuario"
-              />
+                className="bg-gray-800 w-full mt-2 p-2 text-white uppercase hover:bg-gray-900"
+              >
+                Crear usuario
+              </button>
             </form>
           </div>
         </div>
