@@ -205,13 +205,12 @@ const resolvers = {
         throw new Error("El usuario no existe");
       }
 
-      // Revisar si el password es correcto
       const passwordCorrecto = await bcryptjs.compare(
         password,
         existeUsuario.password
       );
       if (!passwordCorrecto) {
-        throw new Error("El Password es Incorrecto");
+        throw new Error("La contraseña es incorrecta");
       }
 
       // Crear el token

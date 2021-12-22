@@ -57,6 +57,10 @@ const registro = () => {
         router.push("/");
       } catch (error) {
         setError(error.message);
+
+        setTimeout(() => {
+          setError(null);
+        }, 1500);
       }
     },
   });
@@ -163,7 +167,7 @@ const registro = () => {
                 />
 
                 {formik.touched.password && formik.errors.password ? (
-                  <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+                  <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
                     <p className="font-bold">Error</p>
                     <p>{formik.errors.password}</p>
                   </div>
