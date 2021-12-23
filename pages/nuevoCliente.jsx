@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import Layout from "../components/Layout";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -34,6 +34,8 @@ const GET_CLIENTES_USUARIO = gql`
 
 const nuevoCliente = () => {
   const router = useRouter();
+  const [mensaje, setMensaje] = useState(null);
+
   const [nuevoCliente] = useMutation(NEW_CLIENT, {
     // actualizamos el cache con los datos del nuevo cliente
     update(cache, { data: { nuevoCliente } }) {
@@ -85,15 +87,29 @@ const nuevoCliente = () => {
 
         return router.push("/");
       } catch (error) {
-        console.log(error);
+        setMensaje(error.message);
+
+        setTimeout(() => {
+          setMensaje(null);
+        }, 3000);
       }
     },
   });
+
+  const showMessage = () => {
+    return (
+      <div className="bg-white py-2 px-3 w-full my-3 max-w-sm text-center mx-auto">
+        <p>{mensaje}</p>
+      </div>
+    );
+  };
 
   return (
     <Layout>
       <div>
         <h1 className="text-2xl text-gray-800 font-light">Nuevo cliente</h1>
+
+        {mensaje && showMessage()}
 
         <div className="flex justify-center mt-5">
           <div className="w-full max-w-lg">

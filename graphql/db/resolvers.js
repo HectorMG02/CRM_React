@@ -262,11 +262,7 @@ const resolvers = {
       return "Producto Eliminado";
     },
     nuevoCliente: async (_, { input }, ctx) => {
-      console.log(ctx);
-
       const { email } = input;
-      // Verificar si el cliente ya esta registrado
-      // console.log(input);
 
       const cliente = await Cliente.findOne({ email });
       if (cliente) {
@@ -274,11 +270,7 @@ const resolvers = {
       }
 
       const nuevoCliente = new Cliente(input);
-
-      // asignar el vendedor
       nuevoCliente.vendedor = ctx.usuario.id;
-
-      // guardarlo en la base de datos
 
       try {
         const resultado = await nuevoCliente.save();

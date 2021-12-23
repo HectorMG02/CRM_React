@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -18,7 +18,9 @@ const login = () => {
   const [autenticarUsuario] = useMutation(USER_LOGIN);
   const router = useRouter();
 
-  localStorage.removeItem("token_crm");
+  useEffect(() => {
+    localStorage.removeItem("token_crm");
+  }, []);
 
   const formik = useFormik({
     initialValues: {
