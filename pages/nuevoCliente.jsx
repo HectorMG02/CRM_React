@@ -1,81 +1,120 @@
 import { useState } from "react";
-import { useRouter } from "next/router";
 import Layout from "../components/Layout";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useMutation, gql } from "@apollo/client";
+import { useRouter } from "next/router";
 
-const NUEVO_USUARIO = gql`
-  mutation nuevoUsuario($input: UsuarioInput) {
-    nuevoUsuario(input: $input) {
+const NEW_CLIENT = gql`
+  mutation nuevoCliente($input: ClienteInput) {
+    nuevoCliente(input: $input) {
       id
       nombre
       apellido
       email
+      empresa
+      telefono
+      vendedor
     }
   }
 `;
 
-const registro = () => {
-  const [error, setError] = useState(null);
-  const [nuevoUsuario] = useMutation(NUEVO_USUARIO);
+const GET_CLIENTES_USUARIO = gql`
+  query obtenerClientesVendedor {
+    obtenerClientesVendedor {
+      id
+      nombre
+      apellido
+      email
+      empresa
+      telefono
+    }
+  }
+`;
 
+const nuevoCliente = () => {
   const router = useRouter();
+  const [mensaje, setMensaje] = useState(null);
+
+  const [nuevoCliente] = useMutation(NEW_CLIENT, {
+    // actualizamos el cache con los datos del nuevo cliente
+    update(cache, { data: { nuevoCliente } }) {
+      const { obtenerClientesVendedor } = cache.readQuery({
+        query: GET_CLIENTES_USUARIO,
+      });
+
+      // reescribimos el cache, que no se debe modificar, solo reescribir
+      cache.writeQuery({
+        query: GET_CLIENTES_USUARIO,
+        data: {
+          obtenerClientesVendedor: [...obtenerClientesVendedor, nuevoCliente], // agregamos a un array nuevo, el nuevo cliente que hemos creado, junto con los clientes que ya existian
+        },
+      });
+    },
+  });
 
   const formik = useFormik({
     initialValues: {
       nombre: "",
       apellido: "",
+      empresa: "",
       email: "",
-      password: "",
+      telefono: "",
     },
     validationSchema: Yup.object({
       nombre: Yup.string().required("El nombre es obligatorio"),
       apellido: Yup.string().required("El apellido es obligatorio"),
+      empresa: Yup.string().required("La empresa es obligatoria"),
       email: Yup.string()
         .email("El email no es válido")
         .required("El email es obligatorio"),
-      password: Yup.string().min(
-        6,
-        "La contraseña debe tener al menos 6 caracteres"
-      ),
     }),
     onSubmit: async (values) => {
+      const { nombre, apellido, email, empresa, telefono } = values;
+
       try {
-        const { nombre, apellido, email, password } = values;
-        const { data } = await nuevoUsuario({
+        const data = await nuevoCliente({
           variables: {
             input: {
               nombre,
               apellido,
               email,
-              password,
+              empresa,
+              telefono,
             },
           },
         });
 
-        router.push("/");
+        return router.push("/");
       } catch (error) {
-        setError(error.message);
+        setMensaje(error.message);
 
         setTimeout(() => {
-          setError(null);
-        }, 1500);
+          setMensaje(null);
+        }, 3000);
       }
     },
   });
 
+  const showMessage = () => {
+    return (
+      <div className="bg-white py-2 px-3 w-full my-3 max-w-sm text-center mx-auto">
+        <p>{mensaje}</p>
+      </div>
+    );
+  };
+
   return (
-    <>
-      <Layout>
-        <h1 className="text-center text-2xl text-white font-light">
-          Registro de usuario
-        </h1>
+    <Layout>
+      <div>
+        <h1 className="text-2xl text-gray-800 font-light">Nuevo cliente</h1>
+
+        {mensaje && showMessage()}
 
         <div className="flex justify-center mt-5">
-          <div className="w-full max-w-sm">
+          <div className="w-full max-w-lg">
             <form
-              className="bg-white rounded shadow-md px-8 pt-6 pb-8 mb-4"
+              className="bg-white shadow-md px-8 pt-6 pb-8 mb-4"
               onSubmit={formik.handleSubmit}
             >
               <div className="mb-4">
@@ -86,12 +125,13 @@ const registro = () => {
                   Nombre
                 </label>
                 <input
-                  type="nombre"
+                  type="text"
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   id="nombre"
-                  placeholder="Nombre del usuario"
-                  value={formik.values.nombre}
+                  placeholder="Nombre del cliente"
                   onChange={formik.handleChange}
+                  value={formik.values.nombre}
+                  onBlur={formik.handleBlur}
                 />
 
                 {formik.touched.nombre && formik.errors.nombre ? (
@@ -105,17 +145,18 @@ const registro = () => {
               <div className="mb-4">
                 <label
                   className="block text-gray-700 text-sm font-bold mb-2"
-                  htmlFor="nombre"
+                  htmlFor="apellido"
                 >
                   Apellido
                 </label>
                 <input
-                  type="apellido"
+                  type="text"
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   id="apellido"
-                  placeholder="Apellido del usuario"
-                  value={formik.values.apellido}
+                  placeholder="Apellido del cliente"
                   onChange={formik.handleChange}
+                  value={formik.values.apellido}
+                  onBlur={formik.handleBlur}
                 />
 
                 {formik.touched.apellido && formik.errors.apellido ? (
@@ -129,7 +170,7 @@ const registro = () => {
               <div className="mb-4">
                 <label
                   className="block text-gray-700 text-sm font-bold mb-2"
-                  htmlFor="nombre"
+                  htmlFor="email"
                 >
                   Email
                 </label>
@@ -137,9 +178,10 @@ const registro = () => {
                   type="email"
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   id="email"
-                  placeholder="Email del usuario"
-                  value={formik.values.email}
+                  placeholder="Email del cliente"
                   onChange={formik.handleChange}
+                  value={formik.values.email}
+                  onBlur={formik.handleBlur}
                 />
 
                 {formik.touched.email && formik.errors.email ? (
@@ -150,48 +192,61 @@ const registro = () => {
                 ) : null}
               </div>
 
-              <div>
+              <div className="mb-4">
                 <label
                   className="block text-gray-700 text-sm font-bold mb-2"
-                  htmlFor="password"
+                  htmlFor="empresa"
                 >
-                  Password
+                  Empresa
                 </label>
                 <input
-                  type="password"
-                  className="shadow appearance-none border rounded w-full mb-3 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="password"
-                  placeholder="Password del usuario"
-                  value={formik.values.password}
+                  type="text"
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  id="empresa"
+                  placeholder="Empresa del cliente"
                   onChange={formik.handleChange}
+                  value={formik.values.empresa}
+                  onBlur={formik.handleBlur}
                 />
 
-                {formik.touched.password && formik.errors.password ? (
-                  <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+                {formik.touched.empresa && formik.errors.empresa ? (
+                  <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
                     <p className="font-bold">Error</p>
-                    <p>{formik.errors.password}</p>
+                    <p>{formik.errors.empresa}</p>
                   </div>
                 ) : null}
               </div>
 
-              {error ? (
-                <div>
-                  <p className="text-red-700 mb-1 text-center">{error}</p>
-                </div>
-              ) : null}
+              <div className="mb-4">
+                <label
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                  htmlFor="telefono"
+                >
+                  Teléfono
+                </label>
+                <input
+                  type="tel"
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  id="telefono"
+                  placeholder="Teléfono del cliente"
+                  onChange={formik.handleChange}
+                  value={formik.values.telefono}
+                  onBlur={formik.handleBlur}
+                />
+              </div>
 
               <button
                 type="submit"
-                className="bg-gray-800 w-full mt-2 p-2 text-white uppercase hover:bg-gray-900"
+                className="bg-gray-800 w-full mt-4 p-2 text-white uppercase hover:bg-gray-900"
               >
-                Crear usuario
+                Crear cliente
               </button>
             </form>
           </div>
         </div>
-      </Layout>
-    </>
+      </div>
+    </Layout>
   );
 };
 
-export default registro;
+export default nuevoCliente;
