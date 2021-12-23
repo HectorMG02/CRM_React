@@ -18,6 +18,11 @@ const Header = () => {
   const { data, loading, error } = useQuery(GET_USER_DATA);
 
   if (loading) return null;
+
+  if (!data) {
+    router.push("/login");
+  }
+
   const { nombre, apellido } = data.obtenerUsuario;
 
   const logout = () => {
