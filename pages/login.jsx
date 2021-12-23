@@ -18,6 +18,8 @@ const login = () => {
   const [autenticarUsuario] = useMutation(USER_LOGIN);
   const router = useRouter();
 
+  localStorage.removeItem("token_crm");
+
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -26,10 +28,10 @@ const login = () => {
     validationSchema: Yup.object({
       email: Yup.string()
         .email("El email no es válido")
-        .required("El email es requerido"),
+        .required("El email es obligatorio"),
       password: Yup.string()
         .min(6, "La contraseña debe tener al menos 6 caracteres")
-        .required("La contraseña es requerida"),
+        .required("La contraseña es obligatoria"),
     }),
     onSubmit: async (values) => {
       try {
