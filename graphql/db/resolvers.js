@@ -18,7 +18,7 @@ const crearToken = (usuario, secreta, expiresIn) => {
 const resolvers = {
   Query: {
     obtenerUsuario: async (_, {}, ctx) => {
-      return ctx.usuario;
+      return ctx.usuario; // guardamos los datos del usuario en headers
     },
     obtenerProductos: async () => {
       try {
@@ -48,9 +48,12 @@ const resolvers = {
     },
     obtenerClientesVendedor: async (_, {}, ctx) => {
       try {
+        const idVendedor = ctx.usuario.id.toString();
+
         const clientes = await Cliente.find({
-          vendedor: ctx.usuario.id.toString(),
+          vendedor: idVendedor,
         });
+
         return clientes;
       } catch (error) {
         console.log(error);
