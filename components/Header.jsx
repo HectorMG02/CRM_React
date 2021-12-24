@@ -19,11 +19,11 @@ const Header = () => {
 
   if (loading) return null;
 
-  if (!data) {
+  if (!localStorage.getItem("token_crm")) {
     router.push("/login");
   }
 
-  const { nombre, apellido } = data.obtenerUsuario;
+  const { nombre, apellido } = data.obtenerUsuario || {};
 
   const logout = () => {
     localStorage.removeItem("token_crm");

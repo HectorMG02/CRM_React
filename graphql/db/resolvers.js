@@ -225,7 +225,6 @@ const resolvers = {
       try {
         const producto = new Producto(input);
 
-        // almacenar en la bd
         const resultado = await producto.save();
 
         return resultado;
