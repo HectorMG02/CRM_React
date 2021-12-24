@@ -15,15 +15,15 @@ const GET_USER_DATA = gql`
 const Header = () => {
   const router = useRouter();
 
+  if (!localStorage.getItem("token_crm")) {
+    router.push("/login");
+  }
+
   const { data, loading, error } = useQuery(GET_USER_DATA);
 
   if (loading) return null;
 
-  if (!data) {
-    router.push("/login");
-  }
-
-  const { nombre, apellido } = data.obtenerUsuario;
+  const { nombre, apellido } = data.obtenerUsuario || {};
 
   const logout = () => {
     localStorage.removeItem("token_crm");
