@@ -74,7 +74,6 @@ const nuevoProducto = () => {
             },
           },
         });
-        console.log({ data });
 
         router.push("/productos");
       } catch (error) {

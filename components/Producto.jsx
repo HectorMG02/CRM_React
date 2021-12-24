@@ -1,6 +1,7 @@
 import React from "react";
 import { gql, useMutation } from "@apollo/client";
 import Swal from "sweetalert2";
+import { useRouter } from "next/router";
 
 const ELIMINAR_PRODUCTO = gql`
   mutation eliminarProducto($id: ID!) {
@@ -19,7 +20,13 @@ const GET_PRODUCTOS = gql`
   }
 `;
 const Producto = ({ producto: { nombre, existencia, precio, id } }) => {
-  const editarProducto = (id) => {};
+  const router = useRouter();
+  const editarProducto = (id) => {
+    router.push({
+      pathname: "/editarProducto/[id]",
+      query: { id },
+    });
+  };
 
   const [eliminarProductoSubmit] = useMutation(ELIMINAR_PRODUCTO, {
     update(cache) {
