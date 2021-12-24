@@ -30,6 +30,8 @@ export default function Home() {
   // FIXME: tengo que hacer estas comprobaciones porque si no me salta un error
   if (!data.obtenerClientesVendedor) {
     noAuth();
+  } else if (!data.obtenerClientesVendedor) {
+    noAuth();
   } else if (!data.obtenerClientesVendedor.map((cliente) => cliente.id)) {
     noAuth();
   }
@@ -56,6 +58,7 @@ export default function Home() {
                     <th className="w-1/5 px-4 py-2">Nombre</th>
                     <th className="w-1/5 px-4 py-2">Empresa</th>
                     <th className="w-1/5 px-4 py-2">Email</th>
+                    <th className="w-1/5 px-4 py-2">Editar</th>
                     <th className="w-1/5 px-4 py-2">Eliminar</th>
                   </tr>
                 </thead>

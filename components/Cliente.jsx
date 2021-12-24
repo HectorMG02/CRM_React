@@ -1,5 +1,6 @@
 import Swal from "sweetalert2";
 import { gql, useMutation } from "@apollo/client";
+import Router from "next/router";
 
 const GET_CLIENTES_USUARIO = gql`
   query obtenerClientesVendedor {
@@ -50,7 +51,6 @@ const Cliente = ({ cliente }) => {
       confirmButtonText: "Si, eliminar",
       cancelButtonText: "Cancelar",
     }).then(async (result) => {
-      console.log({ id });
       if (result.value) {
         try {
           const { data } = await eliminarClienteSubmit({
@@ -72,6 +72,13 @@ const Cliente = ({ cliente }) => {
     });
   };
 
+  const editarCliente = (id) => {
+    Router.push({
+      pathname: "/editarCliente/[id]",
+      query: { id },
+    });
+  };
+
   return (
     <tr className="text-center">
       <td className="border px-4 py-2">{nombre}</td>
@@ -80,12 +87,35 @@ const Cliente = ({ cliente }) => {
       <td className="border px-4 py-2">
         <button
           type="button"
+          className="flex justify-center items-center p-2 w-full rounded-md text-white font-bold bg-green-600 hover:bg-green-500 focus:outline-none focus:border-red-700 focus:shadow-outline-red active:bg-red-700 transition duration-150"
+          onClick={() => editarCliente(id)}
+        >
+          Editar
+          <svg
+            className="w-6 h-6 ml-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+            ></path>
+          </svg>
+        </button>
+      </td>
+      <td className="border px-4 py-2">
+        <button
+          type="button"
           className="flex justify-center items-center p-2 w-full rounded-md text-white font-bold bg-red-600 hover:bg-red-500 focus:outline-none focus:border-red-700 focus:shadow-outline-red active:bg-red-700 transition duration-150"
           onClick={() => eliminarCliente(id)}
         >
           Eliminar
           <svg
-            className="w-6 h-6"
+            className="w-6 h-6 ml-2"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"

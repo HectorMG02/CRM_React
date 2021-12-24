@@ -64,10 +64,10 @@ const nuevoCliente = () => {
     validationSchema: Yup.object({
       nombre: Yup.string().required("El nombre es obligatorio"),
       apellido: Yup.string().required("El apellido es obligatorio"),
-      empresa: Yup.string().required("La empresa es obligatoria"),
       email: Yup.string()
         .email("El email no es válido")
         .required("El email es obligatorio"),
+      empresa: Yup.string().required("La empresa es obligatoria"),
     }),
     onSubmit: async (values) => {
       const { nombre, apellido, email, empresa, telefono } = values;

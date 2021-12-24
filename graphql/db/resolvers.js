@@ -69,7 +69,7 @@ const resolvers = {
 
       // Quien lo creo puede verlo
       if (cliente.vendedor.toString() !== ctx.usuario.id) {
-        throw new Error("No tienes las credenciales");
+        throw new Error("Acceso denegado");
       }
 
       return cliente;
@@ -103,7 +103,7 @@ const resolvers = {
 
       // Solo quien lo creo puede verlo
       if (pedido.vendedor.toString() !== ctx.usuario.id) {
-        throw new Error("No tienes las credenciales");
+        throw new Error("Acceso denegado");
       }
 
       // retornar el resultado
@@ -289,7 +289,7 @@ const resolvers = {
 
       // Verificar si el vendedor es quien edita
       if (cliente.vendedor.toString() !== ctx.usuario.id) {
-        throw new Error("No tienes las credenciales");
+        throw new Error("Acceso denegado");
       }
 
       // guardar el cliente
@@ -309,7 +309,7 @@ const resolvers = {
 
       // Verificar si el vendedor es quien edita
       if (cliente.vendedor.toString() !== ctx.usuario.id) {
-        throw new Error("No tienes las credenciales");
+        throw new Error("Acceso denegado");
       }
 
       // Eliminar Cliente
@@ -328,7 +328,7 @@ const resolvers = {
 
       // Verificar si el cliente es del vendedor
       if (clienteExiste.vendedor.toString() !== ctx.usuario.id) {
-        throw new Error("No tienes las credenciales");
+        throw new Error("Acceso denegado");
       }
 
       // Revisar que el stock este disponible
@@ -376,7 +376,7 @@ const resolvers = {
 
       // Si el cliente y pedido pertenece al vendedor
       if (existeCliente.vendedor.toString() !== ctx.usuario.id) {
-        throw new Error("No tienes las credenciales");
+        throw new Error("Acceso denegado");
       }
 
       // Revisar el stock
@@ -414,7 +414,7 @@ const resolvers = {
 
       // verificar si el vendedor es quien lo borra
       if (pedido.vendedor.toString() !== ctx.usuario.id) {
-        throw new Error("No tienes las credenciales");
+        throw new Error("Acceso denegado");
       }
 
       // eliminar de la base de datos
