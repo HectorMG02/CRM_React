@@ -301,6 +301,7 @@ const resolvers = {
     eliminarCliente: async (_, { id }, ctx) => {
       // Verificar si existe o no
       let cliente = await Cliente.findById(id);
+      console.log({ cliente });
 
       if (!cliente) {
         throw new Error("Ese cliente no existe");
