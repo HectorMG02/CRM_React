@@ -2,6 +2,7 @@ import { gql, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import Layout from "../components/Layout";
 import Link from "next/link";
+import Cliente from "../components/Cliente";
 
 const GET_CLIENTES_USUARIO = gql`
   query obtenerClientesVendedor {
@@ -26,6 +27,13 @@ export default function Home() {
     router.push("/login");
   };
 
+  // FIXME: tengo que hacer estas comprobaciones porque si no me salta un error
+  if (!data.obtenerClientesVendedor) {
+    noAuth();
+  } else if (!data.obtenerClientesVendedor.map((cliente) => cliente.id)) {
+    noAuth();
+  }
+
   return (
     <>
       {localStorage.getItem("token_crm") ? (
@@ -48,15 +56,12 @@ export default function Home() {
                     <th className="w-1/5 px-4 py-2">Nombre</th>
                     <th className="w-1/5 px-4 py-2">Empresa</th>
                     <th className="w-1/5 px-4 py-2">Email</th>
+                    <th className="w-1/5 px-4 py-2">Eliminar</th>
                   </tr>
                 </thead>
                 <tbody className="bg-white">
                   {data.obtenerClientesVendedor.map((cliente) => (
-                    <tr key={cliente.id} className="text-center">
-                      <td className="border px-4 py-2">{cliente.nombre}</td>
-                      <td className="border px-4 py-2">{cliente.empresa}</td>
-                      <td className="border px-4 py-2">{cliente.email}</td>
-                    </tr>
+                    <Cliente key={cliente.id} cliente={cliente} />
                   ))}
                 </tbody>
               </table>
