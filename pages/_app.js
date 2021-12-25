@@ -1,15 +1,15 @@
 import "../styles/globals.css";
 import { ApolloProvider } from "@apollo/client";
 import client from "../config/apollo";
-import PedidoState from "../context/pedidos/pedidoState";
+import PedidosProvider from "../context/PedidosProvider";
 
 function MyApp({ Component, pageProps }) {
   return (
-    <ApolloProvider client={client}>
-      <PedidoState>
+    <PedidosProvider>
+      <ApolloProvider client={client}>
         <Component {...pageProps} />
-      </PedidoState>
-    </ApolloProvider>
+      </ApolloProvider>
+    </PedidosProvider>
   );
 }
 
