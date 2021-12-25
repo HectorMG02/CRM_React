@@ -1,28 +1,35 @@
 // los context son como los services de Angular
-import { createContext, useReducer, useState, setState } from "react";
+import { createContext, useState } from "react";
 
 export const PedidosContext = createContext();
 
 const PedidosProvider = ({ children }) => {
-  const [clientes, setClientes] = useState([]);
-  const [productos, setProductos] = useState([]);
-
   const initialState = {
     cliente: [],
     productos: [],
     total: 0,
   };
 
+  const [state, setState] = useState(initialState);
+
   const addClient = (cliente) => {
-    setClientes({ ...clientes, cliente });
+    setState({
+      ...state,
+      cliente: cliente,
+    });
   };
 
   const addProduct = (producto) => {
-    setProductos({ ...productos, producto });
+    setState({
+      ...state,
+      productos: producto,
+    });
   };
 
   return (
-    <PedidosContext.Provider value={{ addClient, addProduct }}>
+    <PedidosContext.Provider
+      value={{ addClient, addProduct, productos: state.productos }}
+    >
       {children}
     </PedidosContext.Provider>
   );

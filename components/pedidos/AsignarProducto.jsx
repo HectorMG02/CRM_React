@@ -42,7 +42,9 @@ const AsignarProducto = () => {
         className="mt-3"
         instanceId="cliente"
         options={obtenerProductos}
-        getOptionLabel={(option) => option.nombre}
+        getOptionLabel={(option) =>
+          `${option.nombre} - ${option.existencia} Disponibles`
+        }
         getOptionValue={(option) => option.id}
         isMulti={true}
         onChange={seleccionarProducto}
