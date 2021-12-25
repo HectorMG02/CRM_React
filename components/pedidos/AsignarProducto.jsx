@@ -3,54 +3,52 @@ import Select from "react-select";
 import { PedidosContext } from "../../context/PedidosProvider";
 import { gql, useQuery } from "@apollo/client";
 
-const GET_CLIENTES_USUARIO = gql`
-  query obtenerClientesVendedor {
-    obtenerClientesVendedor {
+const GET_PRODUCTOS = gql`
+  query obtenerProductos {
+    obtenerProductos {
       id
       nombre
-      apellido
-      email
-      empresa
-      telefono
+      precio
+      existencia
+      creado
     }
   }
 `;
 
-const AsignarCliente = () => {
-  const { data, loading, error } = useQuery(GET_CLIENTES_USUARIO);
-  const [cliente, setCliente] = useState([]);
+const AsignarProducto = () => {
+  const { data, loading, error } = useQuery(GET_PRODUCTOS);
+  const [producto, setProducto] = useState([]);
   const pedidoContext = useContext(PedidosContext);
-  const { addClient } = pedidoContext;
+  const { addProduct } = pedidoContext;
 
-  // cada vez que cambia sabores, se ejecuta el useEffect
   useEffect(() => {
-    addClient(cliente);
-  }, [cliente]);
+    addProduct(producto);
+  }, [producto]);
 
   if (loading) return "Cargando...";
 
-  const { obtenerClientesVendedor } = data;
+  const { obtenerProductos } = data;
 
-  const seleccionarCliente = (values) => {
-    setCliente(values);
+  const seleccionarProducto = (values) => {
+    setProducto(values);
   };
 
   return (
     <>
       <p className="mt-10 my-2 bg-white border-l-4 border-gray-800 text-gray-700 p-2 text-sm font-bold">
-        1 - Asignar cliente
+        2 - Selecciona o busca los productos
       </p>
       <Select
         className="mt-3"
         instanceId="cliente"
-        options={obtenerClientesVendedor}
+        options={obtenerProductos}
         getOptionLabel={(option) => option.nombre}
         getOptionValue={(option) => option.id}
         isMulti={true}
-        onChange={seleccionarCliente}
+        onChange={seleccionarProducto}
       />
     </>
   );
 };
 
-export default AsignarCliente;
+export default AsignarProducto;
