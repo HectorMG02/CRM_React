@@ -3,6 +3,7 @@ import Layout from "../components/Layout";
 import AsignarCliente from "../components/pedidos/AsignarCliente";
 import AsignarProducto from "../components/pedidos/AsignarProducto";
 import ResumenPedido from "../components/pedidos/ResumenPedido";
+import Total from "../components/pedidos/Total";
 const nuevoPedido = () => {
   return (
     <Layout>
@@ -13,6 +14,15 @@ const nuevoPedido = () => {
           <AsignarCliente />
           <AsignarProducto />
           <ResumenPedido />
+
+          <Total />
+
+          <button
+            type="button"
+            className="bg-gray-800 w-full mt-5 p-2 text-white uppercase font-bold hover:bg-gray-900"
+          >
+            Registrar pedido
+          </button>
         </div>
       </div>
     </Layout>

@@ -26,9 +26,26 @@ const PedidosProvider = ({ children }) => {
     });
   };
 
+  const cantidadProducto = (nuevoProducto) => {
+    const productos = [...state.productos];
+    const index = productos.findIndex(
+      (producto) => producto.id === nuevoProducto.id
+    );
+    productos[index] = nuevoProducto;
+    setState({
+      ...state,
+      productos,
+    });
+  };
+
   return (
     <PedidosContext.Provider
-      value={{ addClient, addProduct, productos: state.productos }}
+      value={{
+        addClient,
+        addProduct,
+        cantidadProducto,
+        productos: state.productos,
+      }}
     >
       {children}
     </PedidosContext.Provider>
