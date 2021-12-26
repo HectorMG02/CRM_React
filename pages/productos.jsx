@@ -19,7 +19,6 @@ const GET_PRODUCTOS = gql`
 
 const productos = () => {
   const router = useRouter();
-
   const { data, loading, error } = useQuery(GET_PRODUCTOS);
 
   if (loading) return "Cargando...";

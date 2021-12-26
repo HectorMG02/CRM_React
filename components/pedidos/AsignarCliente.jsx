@@ -46,7 +46,7 @@ const AsignarCliente = () => {
         options={obtenerClientesVendedor}
         getOptionLabel={(option) => option.nombre}
         getOptionValue={(option) => option.id}
-        isMulti={true}
+        isMulti={false}
         onChange={seleccionarCliente}
       />
     </>

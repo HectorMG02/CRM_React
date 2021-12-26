@@ -38,7 +38,7 @@ const resolvers = {
 
       return producto;
     },
-    obtenerClientes: async () => {
+    obtenerClientes: async (_, {}, ctx) => {
       try {
         const clientes = await Cliente.find({});
         return clientes;
@@ -218,7 +218,7 @@ const resolvers = {
 
       // Crear el token
       return {
-        token: crearToken(existeUsuario, process.env.SECRETA, "8h"),
+        token: crearToken(existeUsuario, process.env.SECRETA, "48h"),
       };
     },
     nuevoProducto: async (_, { input }) => {
@@ -300,7 +300,6 @@ const resolvers = {
     eliminarCliente: async (_, { id }, ctx) => {
       // Verificar si existe o no
       let cliente = await Cliente.findById(id);
-      console.log({ cliente });
 
       if (!cliente) {
         throw new Error("Ese cliente no existe");

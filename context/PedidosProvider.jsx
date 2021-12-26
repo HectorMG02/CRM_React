@@ -96,6 +96,7 @@ const PedidosProvider = ({ children }) => {
         addProduct,
         cantidadProducto,
         unlinkProduct,
+        cliente: state.cliente,
         productos: state.productos,
         total: state.total,
       }}
