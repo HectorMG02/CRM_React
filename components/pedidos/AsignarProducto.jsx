@@ -19,7 +19,7 @@ const AsignarProducto = () => {
   const { data, loading, error } = useQuery(GET_PRODUCTOS);
   const [producto, setProducto] = useState([]);
   const pedidoContext = useContext(PedidosContext);
-  const { addProduct } = pedidoContext;
+  const { addProduct, unlinkProduct } = pedidoContext;
 
   useEffect(() => {
     addProduct(producto);
@@ -30,7 +30,11 @@ const AsignarProducto = () => {
   const { obtenerProductos } = data;
 
   const seleccionarProducto = (values) => {
-    setProducto(values);
+    if (producto.length > values.length) {
+      unlinkProduct(values);
+    } else {
+      setProducto(values);
+    }
   };
 
   return (

@@ -3,7 +3,7 @@ import { PedidosContext } from "../../context/PedidosProvider";
 
 const ProductoResumen = ({ producto }) => {
   const pedidoContext = useContext(PedidosContext);
-  const [cantidad, setCantidad] = useState(0);
+  const [cantidad, setCantidad] = useState(1);
   const { cantidadProducto } = pedidoContext;
 
   const { nombre, precio } = producto;
@@ -17,6 +17,7 @@ const ProductoResumen = ({ producto }) => {
       ...producto,
       cantidad: Number(cantidad),
     };
+
     cantidadProducto(nuevoProducto);
   };
 

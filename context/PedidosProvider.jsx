@@ -19,22 +19,73 @@ const PedidosProvider = ({ children }) => {
     });
   };
 
-  const addProduct = (producto) => {
+  const addProduct = (productosSeleccionados) => {
+    let nuevosProductos;
+    if (state.productos.length > 0) {
+      nuevosProductos = productosSeleccionados.map((producto) => {
+        const nuevoObjeto = state.productos.find(
+          (pState) => pState.id === producto.id
+        );
+        return {
+          ...producto,
+          ...nuevoObjeto,
+        };
+      });
+    } else {
+      nuevosProductos = productosSeleccionados;
+    }
+
     setState({
       ...state,
-      productos: producto,
+      productos: nuevosProductos,
     });
   };
 
   const cantidadProducto = (nuevoProducto) => {
-    const productos = [...state.productos];
-    const index = productos.findIndex(
-      (producto) => producto.id === nuevoProducto.id
-    );
-    productos[index] = nuevoProducto;
+    const newProducts = state.productos.map((producto) => {
+      if (producto.id === nuevoProducto.id) {
+        return nuevoProducto;
+      }
+      return producto;
+    });
+
+    let newTotal = 0;
+    newProducts.forEach((producto) => {
+      newTotal += producto.precio * producto.cantidad;
+    });
+
     setState({
       ...state,
-      productos,
+      productos: newProducts,
+      total: newTotal.toFixed(2),
+    });
+  };
+
+  const unlinkProduct = (productosSeleccionados) => {
+    let nuevosProductos;
+    if (state.productos.length > 0) {
+      nuevosProductos = productosSeleccionados.map((producto) => {
+        const nuevoObjeto = state.productos.find(
+          (pState) => pState.id === producto.id
+        );
+        return {
+          ...producto,
+          ...nuevoObjeto,
+        };
+      });
+    } else {
+      nuevosProductos = productosSeleccionados;
+    }
+
+    let newTotal = 0;
+    nuevosProductos.forEach((producto) => {
+      newTotal += producto.precio * producto.cantidad;
+    });
+
+    setState({
+      ...state,
+      productos: nuevosProductos,
+      total: newTotal.toFixed(2),
     });
   };
 
@@ -44,7 +95,9 @@ const PedidosProvider = ({ children }) => {
         addClient,
         addProduct,
         cantidadProducto,
+        unlinkProduct,
         productos: state.productos,
+        total: state.total,
       }}
     >
       {children}
