@@ -331,7 +331,7 @@ const resolvers = {
 
       // Revisar que el stock este disponible
       for await (const articulo of input.pedido) {
-        const { id } = articulo;
+        const { id, nombre } = articulo;
 
         const producto = await Producto.findById(id);
 
@@ -342,6 +342,7 @@ const resolvers = {
         } else {
           // Restar la cantidad a lo disponible
           producto.existencia = producto.existencia - articulo.cantidad;
+          producto.nombre = nombre;
 
           await producto.save();
         }

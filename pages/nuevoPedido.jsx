@@ -36,7 +36,7 @@ const nuevoPedido = () => {
 
   const crearPedido = async () => {
     const pedido = productos.map(
-      ({ __typename, existencia, creado, nombre, precio, ...producto }) => {
+      ({ __typename, existencia, creado, precio, ...producto }) => {
         return producto;
       }
     );
@@ -57,6 +57,8 @@ const nuevoPedido = () => {
             },
           },
         });
+
+        console.log({ data });
 
         router.push("/pedidos");
 

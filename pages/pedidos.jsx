@@ -1,7 +1,38 @@
 import Layout from "../components/Layout";
 import Link from "next/link";
+import { gql, useQuery } from "@apollo/client";
+import Pedido from "../components/Pedido";
+
+const GET_PEDIDOS = gql`
+  query obtenerPedidosVendedor {
+    obtenerPedidosVendedor {
+      id
+      pedido {
+        id
+        nombre
+        cantidad
+      }
+      cliente {
+        id
+        nombre
+        telefono
+        email
+        empresa
+      }
+      vendedor
+      total
+      estado
+    }
+  }
+`;
 
 const pedidos = () => {
+  const { data, loading, error } = useQuery(GET_PEDIDOS);
+
+  if (loading) return "Cargando...";
+
+  const { obtenerPedidosVendedor } = data;
+
   return (
     <div>
       <Layout>
@@ -12,6 +43,14 @@ const pedidos = () => {
             Nuevo pedido
           </a>
         </Link>
+
+        {obtenerPedidosVendedor.length === 0 ? (
+          <p>No hay pedidos</p>
+        ) : (
+          obtenerPedidosVendedor.map((pedido) => (
+            <Pedido key={pedido.id} pedido={pedido} />
+          ))
+        )}
       </Layout>
     </div>
   );
