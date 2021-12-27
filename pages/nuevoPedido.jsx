@@ -17,6 +17,29 @@ const NUEVO_PEDIDO = gql`
   }
 `;
 
+const GET_PEDIDOS = gql`
+  query obtenerPedidosVendedor {
+    obtenerPedidosVendedor {
+      id
+      pedido {
+        id
+        nombre
+        cantidad
+      }
+      cliente {
+        id
+        nombre
+        telefono
+        email
+        empresa
+      }
+      vendedor
+      total
+      estado
+    }
+  }
+`;
+
 const nuevoPedido = () => {
   const router = useRouter();
   const pedidoContext = useContext(PedidosContext);
@@ -24,7 +47,20 @@ const nuevoPedido = () => {
   const { id } = cliente;
   const [mensaje, setMensaje] = useState("");
 
-  const [nuevoPedido] = useMutation(NUEVO_PEDIDO);
+  const [nuevoPedido] = useMutation(NUEVO_PEDIDO, {
+    update(cache, { data: { nuevoPedido } }) {
+      const { obtenerPedidosVendedor } = cache.readQuery({
+        query: GET_PEDIDOS,
+      });
+
+      cache.writeQuery({
+        query: GET_PEDIDOS,
+        data: {
+          obtenerPedidosVendedor: [...obtenerPedidosVendedor, nuevoPedido],
+        },
+      });
+    },
+  });
 
   const validarPedido = () => {
     return !productos.every((producto) => producto.cantidad > 0) ||
@@ -57,8 +93,6 @@ const nuevoPedido = () => {
             },
           },
         });
-
-        console.log({ data });
 
         router.push("/pedidos");
 
