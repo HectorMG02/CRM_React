@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useContext } from "react";
 import Layout from "../components/Layout";
 import AsignarCliente from "../components/pedidos/AsignarCliente";
 import AsignarProducto from "../components/pedidos/AsignarProducto";
@@ -6,6 +6,8 @@ import ResumenPedido from "../components/pedidos/ResumenPedido";
 import Total from "../components/pedidos/Total";
 import { PedidosContext } from "../context/PedidosProvider";
 import { gql, useMutation } from "@apollo/client";
+import { useRouter } from "next/router";
+import Swal from "sweetalert2";
 
 const NUEVO_PEDIDO = gql`
   mutation nuevoPedido($input: PedidoInput) {
@@ -16,9 +18,11 @@ const NUEVO_PEDIDO = gql`
 `;
 
 const nuevoPedido = () => {
+  const router = useRouter();
   const pedidoContext = useContext(PedidosContext);
   const { cliente, productos, total } = pedidoContext;
   const { id } = cliente;
+  const [mensaje, setMensaje] = useState("");
 
   const [nuevoPedido] = useMutation(NUEVO_PEDIDO);
 
@@ -40,33 +44,49 @@ const nuevoPedido = () => {
     total = Number(total);
     total = total.toFixed(2);
     total = Number(total);
-    let input = {
-      cliente: id,
-      total,
-      pedido,
-    };
-
-    console.log(input);
 
     //FIXME: esto está modo cutre para que funcione
     if (validarPedido() === null) {
       try {
         const data = await nuevoPedido({
           variables: {
-            input,
+            input: {
+              cliente: id,
+              total,
+              pedido,
+            },
           },
         });
 
-        console.log({ data });
+        router.push("/pedidos");
+
+        Swal.fire(
+          "Pedido creado",
+          "El pedido se creo correctamente",
+          "success"
+        );
       } catch (error) {
-        console.error(error);
+        setMensaje(error.message.replace("GraphQL error: ", ""));
+        setTimeout(() => {
+          setMensaje("");
+        }, 3000);
       }
     }
+  };
+
+  const mostrarMensaje = () => {
+    return (
+      <div className="bg-white py-2 px-3 w-full my-3 max-w-sm text-center mx-auto">
+        <p>{mensaje} </p>
+      </div>
+    );
   };
 
   return (
     <Layout>
       <h1 className="text-2xl text-gray-800 font-light">Crear nuevo pedido</h1>
+
+      {mensaje && mostrarMensaje()}
 
       <div className="flex justify-center mt-5">
         <div className="w-full max-w-lg">
