@@ -10,8 +10,6 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
   context: ({ req }) => {
-    console.log(req.headers);
-
     const token = req.headers["authorization"] || "";
     if (token) {
       try {
@@ -20,9 +18,10 @@ const server = new ApolloServer({
           process.env.SECRETA
         );
 
-        console.log({ usuario });
         return { usuario };
-      } catch (error) {}
+      } catch (error) {
+        console.log("ctx error:", error);
+      }
     }
   },
 });
