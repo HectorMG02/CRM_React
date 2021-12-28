@@ -8,6 +8,7 @@ const typeDefs = gql`
     apellido: String
     email: String
     creado: String
+    token: String
   }
 
   type Token {

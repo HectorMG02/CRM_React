@@ -58,8 +58,6 @@ const editarProducto = () => {
   const submitEditProduct = async (values) => {
     const { nombre, existencia, precio } = values;
 
-    console.log(values, pid);
-
     try {
       const { data } = await updateProduct({
         variables: {
@@ -71,8 +69,6 @@ const editarProducto = () => {
           },
         },
       });
-
-      console.log({ data });
 
       Swal.fire(
         "Actualizado!",
