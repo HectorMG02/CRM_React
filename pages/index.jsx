@@ -52,25 +52,27 @@ export default function Home() {
                 </a>
               </Link>
 
-              <table className="table-auto shadow-md mt-10 w-full w-lg">
-                <thead className="bg-gray-800">
-                  <tr className="text-white">
-                    <th className="w-1/5 px-4 py-2">Nombre</th>
-                    <th className="w-1/5 px-4 py-2">Empresa</th>
-                    <th className="w-1/5 px-4 py-2">Email</th>
-                    <th className="w-1/5 px-4 py-2">Editar</th>
-                    <th className="w-1/5 px-4 py-2">Eliminar</th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white">
-                  {data.obtenerClientesVendedor.length > 0 ||
-                  data.obtenerClientesVendedor == null
-                    ? data.obtenerClientesVendedor.map((cliente) => (
-                        <Cliente key={cliente.id} cliente={cliente} />
-                      ))
-                    : null}
-                </tbody>
-              </table>
+              <div className="overflow-x-scroll">
+                <table className="table-auto shadow-md mt-10 w-full w-lg">
+                  <thead className="bg-gray-800">
+                    <tr className="text-white">
+                      <th className="w-1/5 px-4 py-2">Nombre</th>
+                      <th className="w-1/5 px-4 py-2">Empresa</th>
+                      <th className="w-1/5 px-4 py-2">Email</th>
+                      <th className="w-1/5 px-4 py-2">Editar</th>
+                      <th className="w-1/5 px-4 py-2">Eliminar</th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white">
+                    {data.obtenerClientesVendedor.length > 0 ||
+                    data.obtenerClientesVendedor == null
+                      ? data.obtenerClientesVendedor.map((cliente) => (
+                          <Cliente key={cliente.id} cliente={cliente} />
+                        ))
+                      : null}
+                  </tbody>
+                </table>
+              </div>
             </div>
           )}
         </Layout>
