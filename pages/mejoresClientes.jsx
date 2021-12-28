@@ -3,7 +3,6 @@ import Layout from "../components/Layout";
 import {
   BarChart,
   Bar,
-  Cell,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -12,12 +11,12 @@ import {
 } from "recharts";
 import { gql, useQuery } from "@apollo/client";
 
-const MEJORES_VENDEDORES = gql`
-  query mejoresVendedores {
-    mejoresVendedores {
-      vendedor {
+const MEJORES_CLIENTES = gql`
+  query mejoresClientes {
+    mejoresClientes {
+      cliente {
         nombre
-        email
+        empresa
       }
       total
     }
@@ -26,7 +25,7 @@ const MEJORES_VENDEDORES = gql`
 
 const mejoresClientes = () => {
   const { data, loading, error, startPolling, stopPolling } =
-    useQuery(MEJORES_VENDEDORES);
+    useQuery(MEJORES_CLIENTES);
 
   useEffect(() => {
     startPolling(1000); // consulta la base de datos despues de 1 segundo
@@ -37,26 +36,24 @@ const mejoresClientes = () => {
 
   if (loading) return "Cargando...";
 
-  const { mejoresVendedores } = data;
-  const vendedoresGrafico = [];
+  const { mejoresClientes } = data;
+  const clientesGrafico = [];
 
-  mejoresVendedores.map((vendedor, index) => {
-    vendedoresGrafico[index] = {
-      ...vendedor.vendedor[0],
-      total: vendedor.total,
+  mejoresClientes.map((cliente, index) => {
+    clientesGrafico[index] = {
+      ...cliente.cliente[0],
+      total: cliente.total,
     };
   });
 
-  console.log(vendedoresGrafico);
-
   return (
     <Layout>
-      <h1 className="text-2xl text-gray-800 font-light">Mejores vendedores</h1>
+      <h1 className="text-2xl text-gray-800 font-light">Mejores clientes</h1>
 
       <BarChart
         width={600}
         height={500}
-        data={vendedoresGrafico}
+        data={clientesGrafico}
         margin={{
           top: 5,
           right: 30,

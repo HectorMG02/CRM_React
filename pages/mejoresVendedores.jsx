@@ -3,7 +3,6 @@ import Layout from "../components/Layout";
 import {
   BarChart,
   Bar,
-  Cell,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -46,8 +45,6 @@ const mejoresVendedores = () => {
       total: vendedor.total,
     };
   });
-
-  console.log(vendedoresGrafico);
 
   return (
     <Layout>
