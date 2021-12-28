@@ -21,7 +21,7 @@ export default function Home() {
   const router = useRouter();
   const { data, loading, error } = useQuery(GET_CLIENTES_USUARIO);
 
-  if (loading) return "Cargando...";
+  if (loading || error) return "Cargando...";
 
   const noAuth = () => {
     router.push("/login");
@@ -63,9 +63,12 @@ export default function Home() {
                   </tr>
                 </thead>
                 <tbody className="bg-white">
-                  {data.obtenerClientesVendedor.map((cliente) => (
-                    <Cliente key={cliente.id} cliente={cliente} />
-                  ))}
+                  {data.obtenerClientesVendedor.length > 0 ||
+                  data.obtenerClientesVendedor == null
+                    ? data.obtenerClientesVendedor.map((cliente) => (
+                        <Cliente key={cliente.id} cliente={cliente} />
+                      ))
+                    : null}
                 </tbody>
               </table>
             </div>

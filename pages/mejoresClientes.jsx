@@ -24,7 +24,7 @@ const MEJORES_VENDEDORES = gql`
   }
 `;
 
-const mejoresVendedores = () => {
+const mejoresClientes = () => {
   const { data, loading, error, startPolling, stopPolling } =
     useQuery(MEJORES_VENDEDORES);
 
@@ -75,4 +75,4 @@ const mejoresVendedores = () => {
   );
 };
 
-export default mejoresVendedores;
+export default mejoresClientes;

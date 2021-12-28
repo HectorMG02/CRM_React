@@ -193,7 +193,14 @@ const resolvers = {
       try {
         // Guardarlo en la base de datos
         const usuario = new Usuario(input);
-        usuario.save(); // guardarlo
+        usuario.save();
+
+        const id = usuario._id.toString();
+        usuario.id = id;
+
+        const token = crearToken(usuario, process.env.SECRETA, "48h");
+        usuario.token = token;
+
         return usuario;
       } catch (error) {
         console.log(error);

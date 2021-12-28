@@ -4,6 +4,7 @@ import Layout from "../components/Layout";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useMutation, gql } from "@apollo/client";
+import Link from "next/link";
 
 const NUEVO_USUARIO = gql`
   mutation nuevoUsuario($input: UsuarioInput) {
@@ -12,6 +13,7 @@ const NUEVO_USUARIO = gql`
       nombre
       apellido
       email
+      token
     }
   }
 `;
@@ -54,6 +56,9 @@ const registro = () => {
           },
         });
 
+        const { token } = data.nuevoUsuario;
+        localStorage.setItem("token_crm", token);
+
         router.push("/");
       } catch (error) {
         setError(error.message);
@@ -64,6 +69,13 @@ const registro = () => {
       }
     },
   });
+
+  const crearToken = (usuario, secreta, expiresIn) => {
+    // console.log(usuario);
+    const { id, email, nombre, apellido } = usuario;
+
+    return jwt.sign({ id, email, nombre, apellido }, secreta, { expiresIn });
+  };
 
   return (
     <>
@@ -186,6 +198,9 @@ const registro = () => {
               >
                 Crear usuario
               </button>
+              <Link href="/login">
+                <a className="underline float-right mt-2">Volver al login</a>
+              </Link>
             </form>
           </div>
         </div>

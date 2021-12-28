@@ -45,7 +45,7 @@ const Sidebar = () => {
             router.pathname === "/mejoresVendedores" ? "bg-blue-800 p-3" : "p-3"
           }
         >
-          <Link href="/mejoresvendedores">
+          <Link href="/mejoresVendedores">
             <a className="text-white mb-2 block">Mejores Vendedores</a>
           </Link>
         </li>
@@ -54,7 +54,7 @@ const Sidebar = () => {
             router.pathname === "/mejoresClientes" ? "bg-blue-800 p-3" : "p-3"
           }
         >
-          <Link href="/mejoresclientes">
+          <Link href="/mejoresClientes">
             <a className="text-white mb-2 block">Mejores Clientes</a>
           </Link>
         </li>
